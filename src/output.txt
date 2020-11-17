@@ -1,0 +1,24 @@
+invoking the eua solver
+parsing the file -- ../Data/4.csv
+read 59257 records from ../Data/4.csv successfully
+created edgeServers list ...
+created users list ...
+created coverage list ...
+total number of servers : 99
+total number of users : 3865
+------------------GREEDY OUTPUT------------------------
+number of users allocated : 79
+number of servers used : 54
+------------------RANDOM OUTPUT------------------------
+number of users allocated : 74
+number of servers used : 54
+------------------MCF OUTPUT------------------------
+number of users allocated : 114
+number of used servers : 53
+new algorithm testing 
+------------------MMCF OUTPUT------------------------
+number of users allocated : 120
+number of used servers : 53
+------------------REVERSED ORDER OUTPUT------------------------
+number of users allocated : 68
+number of used servers : 54

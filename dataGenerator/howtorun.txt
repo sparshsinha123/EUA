@@ -1,0 +1,1 @@
+./generator.py --nservers=50 --covLow=100 --covHigh=150 --percent=25 --mean=10 --stdDev=10 --spath='../eua-dataset/edge-servers/site.csv' --upath='../eua-dataset/users/users-aus.csv' --output='../Data/1.csv'
