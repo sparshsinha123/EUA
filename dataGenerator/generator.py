@@ -45,21 +45,8 @@ def generate_data_set(percent = PERCENT, numberOfServers = NUMBER_OF_SERVERS,
     filtered_edges['COVERAGE'] = np.random.uniform(low = coverage_low , high = coverage_high 
                                                    , size = numberOfServers)
     
-
-    ## combine the users and servers and obtain
-    users2 = users.reset_index()
-    users2 = users2.rename(columns = {"index" : "uId"})
-    eua_data_set = filtered_edges.assign(key = 1).merge(users2.assign(key = 1)).drop(columns='key')
-    eua_data_set['actual'] = distance(eua_data_set['LATITUDE'] , eua_data_set['LONGITUDE'],
-                                    eua_data_set['Latitude'] , eua_data_set['Longitude'])
-    eua_data_set = eua_data_set[eua_data_set['actual'] <= eua_data_set['COVERAGE']].drop(columns='actual').reset_index()
-    eua_data_set = eua_data_set.rename(columns={"SITE_ID":"siteId","LATITUDE":"serverLat","LONGITUDE":"serverLong",
-                                               "COVERAGE":"coverage","Latitude":"userLat","Longitude":"userLong"})
-    eua_data_set = eua_data_set[['siteId','serverLat','serverLong','coverage','uId','userLat','userLong']]
-    
-    
     ## adding the randomly generated data
-    num=eua_data_set.shape[0]
+    num=filtered_edges.shape[0]
     serverCPU       = np.random.normal(loc=mean,scale=std_dev,size=num)
     serverRAM       = np.random.normal(loc=mean,scale=std_dev,size=num)
     serverStorage   = np.random.normal(loc=mean,scale=std_dev,size=num)
@@ -70,10 +57,25 @@ def generate_data_set(percent = PERCENT, numberOfServers = NUMBER_OF_SERVERS,
     sRAM = [makePositive(x) for x in serverRAM]
     sSTO = [makePositive(x) for x in serverStorage]
     sBAN = [makePositive(x) for x in serverBandWidth]
-    eua_data_set['SCPU'] = sCPU
-    eua_data_set['SRAM'] = sRAM
-    eua_data_set['SSTO'] = sSTO
-    eua_data_set['SBAN'] = sBAN
+
+    filtered_edges['SCPU'] = sCPU
+    filtered_edges['SRAM'] = sRAM
+    filtered_edges['SSTO'] = sSTO
+    filtered_edges['SBAN'] = sBAN
+
+    ## combine the users and servers and obtain
+    users2 = users.reset_index()
+    users2 = users2.rename(columns = {"index" : "uId"})
+    eua_data_set = filtered_edges.assign(key = 1).merge(users2.assign(key = 1)).drop(columns='key')
+    eua_data_set['actual'] = distance(eua_data_set['LATITUDE'] , eua_data_set['LONGITUDE'],
+                                    eua_data_set['Latitude'] , eua_data_set['Longitude'])
+    eua_data_set = eua_data_set[eua_data_set['actual'] <= eua_data_set['COVERAGE']].drop(columns='actual').reset_index()
+    eua_data_set = eua_data_set.rename(columns={"SITE_ID":"siteId","LATITUDE":"serverLat","LONGITUDE":"serverLong",
+                                               "COVERAGE":"coverage","Latitude":"userLat","Longitude":"userLong"})
+    eua_data_set = eua_data_set[['siteId','serverLat','serverLong','coverage','SCPU','SRAM','SSTO','SBAN','uId','userLat','userLong']]
+    
+    
+
 
 
     resourceSet = [[1,2,1,2],[2,3,3,4],[5,7,6,6]]
